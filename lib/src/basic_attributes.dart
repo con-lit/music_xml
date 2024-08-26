@@ -17,6 +17,13 @@ enum RightLeftMiddle {
   middle,
 }
 
+/// https://www.w3.org/2021/06/musicxml40/musicxml-reference/data-types/start-stop-discontinue/
+enum StartStopDiscontinue {
+  start,
+  stop,
+  discontinue,
+}
+
 RightLeftMiddle parseRightLeftMiddle(String str) => RightLeftMiddle.values
     .firstWhere((e) => e.toString() == 'RightLeftMiddle.' + str);
 

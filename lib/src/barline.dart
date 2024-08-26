@@ -1,5 +1,6 @@
 import 'package:music_xml/src/basic_attributes.dart';
 import 'package:music_xml/src/camel_case.dart';
+import 'package:music_xml/src/ending.dart';
 import 'package:xml/xml.dart';
 
 import 'music_xml_parser_state.dart';
@@ -21,6 +22,14 @@ enum BarStyle {
 BarStyle _parseBarStyle(String str) => BarStyle.values
     .firstWhere((e) => e.toString() == 'BarStyle.' + camelCase(str));
 
+Ending _parseEnding(List<XmlAttribute> attributes) {
+  print('ending:');
+  for (final x in attributes) {
+    print('${x.name.local} = ${x.value}');
+  }
+  return Ending();
+}
+
 /// Internal representation of a MusicXML <barline> element.
 class Barline {
   BarStyle? barStyle;
@@ -30,12 +39,19 @@ class Barline {
   factory Barline.parse(XmlElement xmlBarline, MusicXMLParserState state) {
     BarStyle? barStyle;
     RightLeftMiddle? location;
+    Ending? ending;
 
     // Parse children
     for (final child in xmlBarline.childElements) {
+      print('barline: ${child.name.local}');
       switch (child.name.local) {
         case 'bar-style':
           barStyle = _parseBarStyle(child.innerText);
+          break;
+        case 'repeat':
+          break;
+        case 'ending':
+          ending = _parseEnding(child.attributes);
           break;
         default:
         // Ignore other tag types because they are not relevant to Magenta.
